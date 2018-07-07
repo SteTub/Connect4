@@ -363,7 +363,7 @@ void printTitle()
 void printPlayerSelect(int player_no)
 {
 	std::cout << "\n\t-----------------------\n";
-	std::cout << "\t|     Player " << player_no << "     |\n";
+	std::cout << "\t|     Player " << player_no << "	      |\n";
 	std::cout << "\t-----------------------\n";
 	std::cout << "\t|                     | \n";
 	std::cout << "\t| [H]  Human	      |\n"; 
