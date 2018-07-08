@@ -319,6 +319,8 @@ void selectPlayers(char& player_1, char& player_2){
 	//---PLAYER ONE---//
 	printTitle();
 	printPlayerSelect(1);
+	std::cout << "Player 1:\n";
+	std::cout << "Player 2:\n";
 	std::cin>>choice_in;
 	choice_in=toupper(choice_in);	
 	//error check
@@ -334,6 +336,12 @@ void selectPlayers(char& player_1, char& player_2){
 	//---PLAYER TWO---//
 	printTitle();
 	printPlayerSelect(2);
+	//print previous choice
+	std::cout << "Player 1: ";
+	if(player_1=='H') std::cout << "Human\n";
+	else std::cout << "AI\n";
+	std::cout << "Player 2: ";
+
 	std::cin>>choice_in;
 	choice_in=toupper(choice_in);
 	//error check
@@ -363,13 +371,16 @@ void printTitle()
 void printPlayerSelect(int player_no)
 {
 	std::cout << "\n\t-----------------------\n";
-	std::cout << "\t|     Player " << player_no << "	      |\n";
+	std::cout << "\t|   Select Players:   |\n";
 	std::cout << "\t-----------------------\n";
+	std::cout << "\t| Would you like      | \n";
+	std::cout << "\t| Player " << player_no << " to be      |\n";
 	std::cout << "\t|                     | \n";
-	std::cout << "\t| [H]  Human	      |\n"; 
-	std::cout << "\t| [A]  AI	      | \n";
+	std::cout << "\t|      [H]  Human     |\n"; 
+	std::cout << "\t|            or       | \n";
+	std::cout << "\t|      [A]   AI	      | \n";
 	std::cout << "\t| 		      | \n";
-	std::cout << "\t| [X]  Exit           | \n";
+	std::cout << "\t|      [X]  Exit      | \n";
 	std::cout << "\t|                     | \n";
 	std::cout << "\t-----------------------\n";
 }
