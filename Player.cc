@@ -3,11 +3,11 @@
 
 Player* Player::createPlayer(char choice, char tile, int order)
 {
-	if(choice == 'H')
-		return new Human(tile, order);
-	else if(choice == 'A')
-		return new AI_player(tile, order);
-	else return 0;
+	switch(choice) {
+		case 'H': return new Human(tile, order);
+		case 'A': return new AI_player(tile, order);
+		default:  return 0;
+	}
 }
 
 Player::~Player() {}
