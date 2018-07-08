@@ -44,7 +44,7 @@ AI_player::AI_player(char tile, int order)
 }
 
 //---ACCESS PRIVATE MEMBERS---//
-char AI_player::WhatTile() const{
+char AI_player::returnMyTile() const{
 	return my_tile;
 }
 
@@ -52,7 +52,7 @@ char AI_player::WhatTile() const{
 void AI_player::makeMove(const Board &Game)
 {	
 	//choose column based on strategy
-	int selection = Strategy(Game);
+	int selection = chooseColumnUsingStrategy(Game);
 
 	//if best column choice is full, select random column
 	while(Game.columnFull(selection)){
@@ -66,7 +66,7 @@ void AI_player::makeMove(const Board &Game)
 }
 
 //---DETERMINE STRATEGY---//
-int AI_player::Strategy(const Board &Game)
+int AI_player::chooseColumnUsingStrategy(const Board &Game)
 {
 	int ncols = Game.col_size();
 	int col = 0;
@@ -75,17 +75,17 @@ int AI_player::Strategy(const Board &Game)
 		enemy_tile = Game.secondTile();
 
 	//TRY TO WIN
-	if(FindThree(Game, my_tile) < ncols+1){		//if found 3 and can win, will win
-		col = FindThree(Game, my_tile);
+	if(findWinningMove(Game, my_tile) < ncols+1){		//if found 3 and can win, will win
+		col = findWinningMove(Game, my_tile);
 	}	
 
 	//BLOCK AN OPPONENTS WIN
-	else if(FindThree(Game, enemy_tile) < ncols+1){	//if opponent has 3 in row, block opponents win
-		col = FindThree(Game, enemy_tile);
+	else if(findWinningMove(Game, enemy_tile) < ncols+1){	//if opponent has 3 in row, block opponents win
+		col = findWinningMove(Game, enemy_tile);
 	}	
 	//Prevent a 3 in a horizontal row
-	else if(FindHorizontalPair(Game, enemy_tile) < ncols+1){	//cut off opponent trap, if opponent has 2 in a row, will play next to one
-		col = FindHorizontalPair(Game, enemy_tile);
+	else if(findHorizontalPair(Game, enemy_tile) < ncols+1){	//cut off opponent trap, if opponent has 2 in a row, will play next to one
+		col = findHorizontalPair(Game, enemy_tile);
 	
 		if(choiceWouldCauseLoss(Game, col+1, my_tile, enemy_tile)){	//avoid giving opponent the win
 			col = 0;
@@ -93,14 +93,14 @@ int AI_player::Strategy(const Board &Game)
 	}
 	//If the above three fail then picks random	
 	if(col == 0){
-		col = WeightedChoice(Game, my_tile, enemy_tile);
+		col = chooseRandomColumnGaussian(Game, my_tile, enemy_tile);
 	} 
 
 	return col;
 }
 
 //---IF NO OTHER OPTION, PRIORITIZES MIDDLE---//
-int AI_player::WeightedChoice(const Board &Game, char tile, char enemy_tile)
+int AI_player::chooseRandomColumnGaussian(const Board &Game, char tile, char enemy_tile)
 {
 	int ncols = Game.col_size();
 	int mid = ncols/2;
@@ -108,13 +108,15 @@ int AI_player::WeightedChoice(const Board &Game, char tile, char enemy_tile)
 
 	std::random_device rd;
 	std::mt19937 generator(rd());
-	std::normal_distribution<> distrib(mid,0.7);	//for now only assume 7 columns
+	std::normal_distribution<> distrib(mid,0.7);
 
-	if(ncols % 2 == 0)	//if even number of cols, ignoring for now
+	//If number of columns is even, requires a different rng
+	//for now ignoring and locking number of columns at 7
+	if(ncols % 2 == 0)
 		 return rand() % ncols;
 		
-	else {			//odd number of cols
-		//std::normal_distribution<> distrib(mid,1.5);
+	//odd number of columns
+	else {			
 		col = std::round(distrib(generator));	
 		
 		while(Game.columnFull(col) && !(col >= 0) && !(col <= ncols-1))
@@ -143,14 +145,14 @@ int AI_player::choiceWouldCauseLoss(const Board &Game, int col, char tile, char 
 	test_game.insertInColumn(col, tile);
 
 	//CHECK FOR WIN
-	if(FindThree(test_game, enemy_tile) < test_game.col_size())		//if found 3 and can win, will win
+	if(findWinningMove(test_game, enemy_tile) < test_game.col_size())		//if found 3 and can win, will win
 		return 1;
 	
 	return 0;
 }
 
 //Find two tiles in a row to set up or stop a trap
-int AI_player::FindHorizontalPair(const Board &Game, char tile)
+int AI_player::findHorizontalPair(const Board &Game, char tile)
 {
 	int row = Game.row_size();
 	int col = Game.col_size();
@@ -185,7 +187,7 @@ int AI_player::FindHorizontalPair(const Board &Game, char tile)
 }
 //---FIND THREE TILES WHERE FOURTH TILE WOULD WIN---//
 //This is just a sea of if-else statements
-int AI_player::FindThree(const Board &Game, char tile)
+int AI_player::findWinningMove(const Board &Game, char tile)
 {
 	int nrows = Game.row_size();
 	int ncols = Game.col_size();

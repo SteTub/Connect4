@@ -18,18 +18,17 @@ class AI_player : public Player{
 		//virtual destructor
 		~AI_player() {};
 		
-		int WeightedChoice(const Board &Game, char tile, char enemy_tile);
+		int chooseRandomColumnGaussian(const Board &Game, char tile, char enemy_tile);
 		int choiceWouldCauseLoss(const Board &Game, int col, char tile, char enemy_tile);
-		int FindHorizontalPair(const Board &Game, char tile);	//finds pair on same row to prevent a 3 in a row win on either side
-		int FindThree(const Board &Game, char tile);		//finds three in a row to block opponent or win
-		int Strategy(const Board &Game);			//given the board as it is, what is optimum move
-		void makeMove(const Board &Game);			//what move to make using Strategy
-		char WhatTile() const;					//determines own tile
-		char opponentTile() const;				//determines opponents tile
+		int findHorizontalPair(const Board &Game, char tile);	//finds pair on same row to prevent a 3 in a row win on either side
+		int findWinningMove(const Board &Game, char tile);
+		int chooseColumnUsingStrategy(const Board &Game);	
+		void makeMove(const Board &Game);
+		char returnMyTile() const;					//determines own tile
 
 	private:
-		char my_tile;
-		int player_no;
+		char my_tile;		//stores own tile
+		int player_no;		//player 1 or player 2
 };
 
 class Human : public Player {
