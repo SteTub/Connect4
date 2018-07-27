@@ -1,0 +1,4 @@
+3 no scale
+9 with scale
+10 no scale
+12 no scale
