@@ -1,4 +1,4 @@
-#include "Connect.h"
+#include "Board.h"
 
 //---CONSTRUCTOR---//
 Board::Board(int nrows, int ncols) : nrows{nrows}, ncols{ncols}, elem{new char[nrows * ncols]}
