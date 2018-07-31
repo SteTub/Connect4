@@ -16,20 +16,21 @@ void Game::init(){
 	window.create(video_mode, "Connect 4");
 	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);		
+
 	//BACKGROUND
 	if(!background_texture.loadFromFile("background_1.jpg", sf::IntRect(0,0,1000,1000))){
 		std::cerr << "Error loading from file\n";
 		exit(1);
 	}
 	background.setTexture(background_texture);
+	background.scale(sf::Vector2f(1.0f,1.5f)); 
 
-	background.scale(sf::Vector2f(1.0f,1.5f)); //background 4
 	//MENU
 	menu.initMenu();
+
 	//INIT VALUES
 	game_state = INTRO;
 	first_time=true;
-	set_controls=true;
 	reset_control_text=true;
 	tiles=-1;	//for now tiles are labelled in C standard, ie 0 is first 
 	p1_human = false;
@@ -203,7 +204,7 @@ void Game::update(){
 		checkForGameOver();
 	}
 	//create new tile	
-	if(board.needNewTile()){
+	if(board.needNewTile() && game_state<ENDING){
 		board.createTile();
 		++tiles;
 	}
@@ -235,7 +236,7 @@ void Game::makeAISelection(){
 
 	if(reset_clock){
 		if(tiles%2 == 0)
-			ai_selection = one->makeMove(board);
+			ai_selection = one->makeMove(board);	//if either player is human, this will return 0
 		else if(tiles%2==1) 
 			ai_selection = two->makeMove(board);
 	
@@ -245,7 +246,7 @@ void Game::makeAISelection(){
 
 	sf::Time ai_time=ai_clock.getElapsedTime();
 	if(ai_time > sf::milliseconds(300)){
-		if(board.getTilePosition_Column() == ai_selection && ai_selection > 0){
+		if(board.getTilePosition_Column() == ai_selection && ai_selection > 0){		//doesn't make a move if player is human
 			board.insertInColumn(board.getTilePosition_Column(),tiles%2+1);
 			ai_clock.restart();
 			ai_selection = 0;
@@ -258,8 +259,6 @@ void Game::makeAISelection(){
 		} 
 		else if(board.getTilePosition_Column() < ai_selection && ai_selection > 0){
 			ai_clock.restart();
-//			if(!p1_human && !p2_human)
-//				reset_clock = true;
 			board.moveTileRight();
 		}
 	}  
