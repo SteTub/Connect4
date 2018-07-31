@@ -1,4 +1,4 @@
-#include "Connect.h"
+#include "Board.h"
 #include "Player.h"
 
 Player* Player::createPlayer(char choice, char tile, int order)
