@@ -19,27 +19,15 @@ class Board{
 	Board();
 	~Board(){};
 
-
 	char& operator()(const int row_in, const int col_in);
 	char operator()(const int row_in, const int col_in) const;
-
-	//board in memory
-	int detectWin(int order) const;
-	int columnFull(int col) const;
-	void insertInColumn(int col, int order);
-	void printBoard() const;
-	char firstTile() const;
-	char secondTile() const;
-		
-	//draw
-	void draw(sf::RenderWindow& window) const;
-	void drawTiles(sf::RenderWindow& window) const;
-	void drawUnit(sf::RenderWindow& window, int row, int column) const;
-	void drawBase(sf::RenderWindow& window) const;
-	void drawOutline(sf::RenderWindow& window) const;
+	
 	//getters
+	char getFirstTile() const;
+	char getSecondTile() const;
 	int getNumberOfRows() const;
 	int getNumberOfCols() const;
+	
 	//tile interaction
 	void createTile();	
 	bool needNewTile();
@@ -48,9 +36,23 @@ class Board{
 	void startDroppingTile();
 	void finishDroppingTile();
 	bool isTileMoving() const;
-	void tileDropping(sf::Int32 update_time);
 	int getTilePosition_Column() const;
+	void tileDropping(sf::Int32 update_time);
 
+	//board in memory
+	int columnFull(int col) const;
+	void insertInColumn(int col, int order);
+	int detectWin(int order) const;
+	void printBoard() const;
+		
+	//draw
+	void draw(sf::RenderWindow& window) const;
+	void drawTiles(sf::RenderWindow& window) const;
+	void drawUnit(sf::RenderWindow& window, int row, int column) const;
+	void drawBase(sf::RenderWindow& window) const;
+	void drawOutline(sf::RenderWindow& window) const;
+
+	//winning animation
 	void findWinningTiles(std::vector<coordinates>&winning_tiles);
 	void flashWinningTiles();
 

@@ -56,9 +56,9 @@ int AI_player::chooseColumnUsingStrategy(const Board &board)
 {
 	int ncols = board.getNumberOfCols();
 	int col = 0;
-	char enemy_tile = board.firstTile();
+	char enemy_tile = board.getFirstTile();
 	if(player_no == 1)
-		enemy_tile = board.secondTile();
+		enemy_tile = board.getSecondTile();
 
 	//TRY TO WIN
 	if(findWinningMove(board, my_tile) < ncols+1){		//if found 3 and can win, will win
@@ -140,13 +140,14 @@ int AI_player::choiceWouldCauseLoss(const Board &board, int col, char tile, char
 //Find two tiles in a row to set up or stop a trap
 int AI_player::findHorizontalPair(const Board &board, char tile)
 {
+	
 	int row = board.getNumberOfRows();
 	int col = board.getNumberOfCols();
 
 	for(int i=1;i<=row;i++){
-		for(int j=2;j<(col-3);j++){
-			//if find a horizontal pair with space on either side
+		for(int j=2;j<=(col-3);j++){
 			if(board(i,j) == tile && board(i,j+1) == tile && board(i,j-1)==' '&& board(i,j+2)==' '){
+
 				//bottom row
 				if(i==1){
 					//prioritize the space closer to the middle

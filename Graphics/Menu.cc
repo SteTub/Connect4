@@ -1,29 +1,13 @@
 #include "Menu.h"
 
+//---CONSTRUCTOR---//
 Menu::Menu()
 {
-	current_selection = 0;
+	at_human_choice = true;
 	at_wasd_choice = false;
 }
 
-bool Menu::atHighestChoice() const{
-	if(current_selection == 0)
-		return true;
-	
-	return false;
-}
-bool Menu::atLowestChoice() const{
-	if(current_selection==1)
-		return true;
-	
-	return false;
-}
-
-bool Menu::isMenuTileMoving() const{
-
-	return menu_tile.isMoving();
-}
-
+//---INIT---//
 void Menu::initMenu(){
 
 	initFont();
@@ -41,6 +25,7 @@ void Menu::initFont(){
 	}
 }
 
+//---TITLE SCREEN---//
 void Menu::initTitleScreen(){
 
 	//MAIN TITLE
@@ -58,6 +43,15 @@ void Menu::initTitleScreen(){
 	start.setColor(sf::Color::White);
 
 }
+
+void Menu::drawTitleScreen(sf::RenderWindow& window) const{
+
+	window.draw(title);
+	window.draw(start);
+	window.draw(menu_tile);
+}
+
+//---PLAYER SELECT SCREEN---//
 void Menu::initPlayerSelectionScreen(){
 
 	//PLAYER 1 SELECT
@@ -108,34 +102,6 @@ void Menu::initPlayerSelectionScreen(){
 	AI.setColor(sf::Color::Black);
 }
 
-void Menu::resetForPlayerTwoChoice(){
-
-	initMenuTile(1);
-	human_box.setOutlineColor(sf::Color(255,105,0));
-	AI_box.setOutlineColor(sf::Color::Yellow);
-	current_selection = 0;
-}
-void Menu::moveChoiceDown(){
-
-	menu_tile.move(0,+2*WINDOW_HEIGHT/10.0);
-	AI_box.setOutlineColor(sf::Color(255,105,0));			
-	human_box.setOutlineColor(sf::Color::Yellow);
-	++current_selection;
-}
-void Menu::moveChoiceUp(){
-	menu_tile.move(0,-2*WINDOW_HEIGHT/10.0);
-	human_box.setOutlineColor(sf::Color(255,105,0));
-	AI_box.setOutlineColor(sf::Color::Yellow);
-	--current_selection;
-}
-	
-void Menu::drawTitleScreen(sf::RenderWindow& window) const{
-
-	window.draw(start);
-	window.draw(title);
-	window.draw(menu_tile);
-
-}
 void Menu::drawPlayerSelectionScreen(sf::RenderWindow& window, int player) const{
 	switch(player){
 	case 1:	
@@ -152,47 +118,45 @@ void Menu::drawPlayerSelectionScreen(sf::RenderWindow& window, int player) const
 	window.draw(menu_tile);
 }
 
-void Menu::initWinningScreen(){
+void Menu::movePlayerChoiceDown(){
 
-	//PLAYER 1 SELECT
-	winner.setString("Player 1 wins!");
-	winner.setFont(font);
-	winner.setCharacterSize(40);
-	//winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT/2-winner.getGlobalBounds().height/2);
-	winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
-	winner.setColor(sf::Color::Red);
-	//PLAYER 2 SELECT 
-	winner2.setString("Player 2 wins!");
-	winner2.setFont(font);
-	winner2.setCharacterSize(40);
-	//winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT/2-winner2.getGlobalBounds().height/2);
-	winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
-	winner2.setColor(sf::Color::Yellow);
-
-	//PLAYER 2 SELECT 
-	stale.setString("STALEMATE");
-	stale.setFont(font);
-	stale.setCharacterSize(40);
-	stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
-	//stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT/2-winner2.getGlobalBounds().height/2);
-	stale.setColor(sf::Color::White);	
-}
-
-void Menu::drawEndingScreen(sf::RenderWindow& window, int winning_player) const{
-
-	switch(winning_player){
-	case 0: 
-		window.draw(stale);
-		break;
-	case 1: 
-		window.draw(winner);
-		break;
-	case 2: 
-		window.draw(winner2);
-		break;
+	if(atHumanChoice()){
+		//move tile
+		menu_tile.move(0,+2*WINDOW_HEIGHT/10.0);
+		//highlight ai choice
+		AI_box.setOutlineColor(sf::Color(255,105,0));			
+		//remove hightlight from human choice
+		human_box.setOutlineColor(sf::Color::Yellow);
+		at_human_choice = false;
 	}
 }
+void Menu::movePlayerChoiceUp(){
+	if(atAIChoice()){
+		menu_tile.move(0,-2*WINDOW_HEIGHT/10.0);
+		human_box.setOutlineColor(sf::Color(255,105,0));
+		AI_box.setOutlineColor(sf::Color::Yellow);
+		at_human_choice = true;
+	}
+}
+bool Menu::atHumanChoice() const{
 
+	return at_human_choice;
+}
+bool Menu::atAIChoice() const{
+
+	return !at_human_choice;
+}
+
+void Menu::resetForPlayerTwoChoice(){
+
+	initMenuTile(1);
+	human_box.setOutlineColor(sf::Color(255,105,0));
+	AI_box.setOutlineColor(sf::Color::Yellow);
+
+	at_human_choice = true;
+}
+
+//menu tile
 void Menu::initMenuTile(int which_player){
 
 	menu_tile.setRadius(WINDOW_WIDTH/20.0);
@@ -216,6 +180,7 @@ void Menu::initMenuTile(int which_player){
 		break;
 	}
 }
+
 void Menu::animateMenuTileDropping(){
 
 	//CREATE A BOX FOR COLLISION CHECKS
@@ -236,6 +201,13 @@ void Menu::animateMenuTileDropping(){
 		menu_tile.finishedMoving();
 	}
 }
+
+bool Menu::isMenuTileMoving() const{
+	return menu_tile.isMoving();
+}
+
+//---CONTROLS CHOICE SCREEN---//
+
 void Menu::initControlChoice(){
 
 	//CONTROL CHOICE TITLE
@@ -287,13 +259,6 @@ void Menu::initControlChoice(){
 	p2_controls_text.setColor(sf::Color::Yellow);	
 }
 
-void Menu::resetTextForControlChoice(bool player_1_human,bool player_2_human){
-
-	if(!player_1_human && player_2_human){
-		p1_controls_text.setColor(sf::Color::Yellow);
-	}
-}
-
 void Menu::drawControlChoice(sf::RenderWindow& window, bool player_1_human,bool player_2_human){
 	window.draw(controls);
 	window.draw(wasd_box);
@@ -304,6 +269,7 @@ void Menu::drawControlChoice(sf::RenderWindow& window, bool player_1_human,bool 
 	if(player_1_human && player_2_human)
 		window.draw(p2_controls_text);
 }
+
 void Menu::moveControlChoiceLeft(){
 	if(at_wasd_choice){
 		arrows_box.setFillColor(sf::Color(255,105,0));
@@ -334,3 +300,50 @@ void Menu::moveControlChoiceRight(){
 bool Menu::playerChoseWASD() const{
 	return at_wasd_choice;
 }
+void Menu::resetTextForControlChoice(bool player_1_human,bool player_2_human){
+
+	if(!player_1_human && player_2_human){
+		p1_controls_text.setColor(sf::Color::Yellow);
+	}
+}
+
+//---WINNING SCREEN---//
+void Menu::initWinningScreen(){
+
+	//PLAYER 1 SELECT
+	winner.setString("Player 1 wins!");
+	winner.setFont(font);
+	winner.setCharacterSize(40);
+	winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	winner.setColor(sf::Color::Red);
+	//PLAYER 2 SELECT 
+	winner2.setString("Player 2 wins!");
+	winner2.setFont(font);
+	winner2.setCharacterSize(40);
+	winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	winner2.setColor(sf::Color::Yellow);
+
+	//PLAYER 2 SELECT 
+	stale.setString("STALEMATE");
+	stale.setFont(font);
+	stale.setCharacterSize(40);
+	stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	stale.setColor(sf::Color::White);	
+}
+
+void Menu::drawEndingScreen(sf::RenderWindow& window, int winning_player) const{
+
+	switch(winning_player){
+	case 0: 
+		window.draw(stale);
+		break;
+	case 1: 
+		window.draw(winner);
+		break;
+	case 2: 
+		window.draw(winner2);
+		break;
+	}
+}
+
+

@@ -8,21 +8,40 @@ class Game{
 
 	public:
 		Game();
+		//---MAIN FUNCTIONS---//
 		void init();
 		void run();
+		//---DISPLAY---//
 		void display();
+
+		//---PROCESS EVENTS---//
 		void processEvents();
+		
+		void processKeyPress_PlayerChoice(int key_press);
+		void processKeyPress_ControlsChoice(int key_press);
+		void processKeyPress_PlayerTiles(int key_press);
+		void processKeyPress_PlayerOneTile(int key_press);
+		void processKeyPress_PlayerTwoTile(int key_press);
+
+		//---MAKE UPDATES---//
 		void update();
-		void makeAISelection(int selection);
-		void makeHumanSelection();
+		
 		void updateDroppingTile();
+		void makeAISelection();
+		void checkForGameOver();
+		void moveToNextGameState();
+
+		//---GET PLAYER TYPES---//
 		bool isPlayerOneHuman() const;
 		bool isPlayerTwoHuman() const;
+
+		//---SET PLAYER TYPES AND CONTROLS---//			
+		void setPlayersAndControls();
+		void setPlayerAsHuman();	
 		void setPlayerOneHuman(); 
 		void setPlayerTwoHuman(); 
-		void setPlayerAsHuman();	
 		void switchPlayerControls();
-
+	
 	private:
 		int game_state;
 		bool first_time;
@@ -34,12 +53,10 @@ class Game{
 		sf::RenderWindow window;
 		
 		Board board;
-		//----------//
 		Player* one;
 		Player* two;
 		char p1_choice, p2_choice;
 		char tile_1, tile_2;
-		//----------//
 		sf::Clock ai_clock,update_clock;
 		sf::Int32 update_time;
 		Menu menu;
@@ -47,7 +64,6 @@ class Game{
 		sf::Texture background_texture;
 		sf::Sprite background;
 		bool p1_human, p2_human;
-		bool p1_winner, p2_winner, stalemate;		
 		int result;
 		
 		enum state{INTRO,P1_SELECT,P2_SELECT,CONTROLS,PLAYING,ENDING};

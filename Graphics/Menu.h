@@ -4,39 +4,47 @@ class Menu{
 
 	public:
 	Menu();
-	//init 
+	
+	//---INITIALIZE---//
 	void initMenu();
 	void initFont();
+
+	//---TITLE SCREEN---//
 	void initTitleScreen();
+	void drawTitleScreen(sf::RenderWindow& window) const;
+
+	//---PLAYER SELECT SCREEN---//
 	void initPlayerSelectionScreen();
-	void initControlChoice();
-	void initWinningScreen();
-	
+	void drawPlayerSelectionScreen(sf::RenderWindow& window, int player) const;
+	void movePlayerChoiceDown();
+	void movePlayerChoiceUp();
+	bool atHumanChoice() const;
+	bool atAIChoice() const;
+	bool atHighestChoice() const;
+	bool atLowestChoice() const;
 	void resetForPlayerTwoChoice();
+
 	//menu tile 
 	void initMenuTile(int player);
 	void animateMenuTileDropping();
 	bool isMenuTileMoving() const;
-	//draw
-	void drawTitleScreen(sf::RenderWindow& window) const;
-	void drawPlayerSelectionScreen(sf::RenderWindow& window, int player) const;
+
+	//---CONTROLS CHOICE SCREEN---//
+	void initControlChoice();
 	void drawControlChoice(sf::RenderWindow& window, bool player_1_human, bool player_2_human);
-	void drawEndingScreen(sf::RenderWindow& window, int winning_player) const;
-	//movement
-	void moveChoiceDown();
-	void moveChoiceUp();
-	bool atHighestChoice() const;
-	bool atLowestChoice() const;
 	void moveControlChoiceLeft();
 	void moveControlChoiceRight();
-	//control scheme
 	bool playerChoseWASD() const;
 	void resetTextForControlChoice(bool player_1_human, bool player_2_human);
 
-	//----WINNING SCREENS----//
+	//---WINNING SCREEN---//
+	void initWinningScreen();
+	void drawEndingScreen(sf::RenderWindow& window, int winning_player) const;
 
 	private:
-		int current_selection;
+//		int current_selection;
+
+		bool at_human_choice;
 		sf::RectangleShape human_box, AI_box;
 		Tile menu_tile;
 		sf::Text title, start, select_p1, select_p2, human, AI, winner, winner2, stale;

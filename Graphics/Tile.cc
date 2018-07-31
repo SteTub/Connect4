@@ -1,5 +1,6 @@
 #include "Tile.h"
 
+//---CONSTRUCTOR---//
 Tile::Tile(){
 
 	falling_speed=0.0;
@@ -7,7 +8,8 @@ Tile::Tile(){
 	row_position=0;
 	col_position=4;
 }
-	
+
+//---INITIALIZE---//	
 void Tile::initTile(int which_player){
 
 	setRadius(WINDOW_WIDTH/20.0);
@@ -28,6 +30,31 @@ void Tile::initTile(int which_player){
 	}
 }
 
+//---GETTERS---//
+double Tile::getMySpeed() const{
+	return falling_speed;
+}
+int Tile::getRowPosition() const{
+	return row_position;
+}
+int Tile::getColumnPosition() const{
+	return col_position;
+}
+
+//---SETTERS---//
+
+void Tile::setMySpeed(double new_speed){
+	falling_speed = new_speed;
+}
+void Tile::setRowPosition(int row_in){
+	row_position=row_in;
+}
+void Tile::setColumnPosition(int column_in){
+	col_position=column_in;
+}
+
+//---MOVEMENT---//
+
 void Tile::moveLeft(){
 
 	if(!moving){
@@ -46,33 +73,18 @@ void Tile::moveRight(){
 		}
 	}
 }
-bool Tile::isMoving() const{
-	return moving;
-}
 void Tile::startedMoving(){
 	moving=true;
 }
 void Tile::finishedMoving(){
 	moving=false;
 }
-int Tile::getRowPosition() const{
-	return row_position;
+bool Tile::isMoving() const{
+	return moving;
 }
-int Tile::getColumnPosition() const{
-	return col_position;
-}
-void Tile::setRowPosition(int row_in){
-	row_position=row_in;
-}
-void Tile::setColumnPosition(int column_in){
-	col_position=column_in;
-}
-double Tile::getMySpeed() const{
-	return falling_speed;
-}
-void Tile::setMySpeed(double new_speed){
-	falling_speed = new_speed;
-}
+
+//---COLLISIONS---//
+
 bool Tile::intersectWith(const sf::CircleShape &other_tile) const{
 	sf::FloatRect my_position=(*this).getGlobalBounds();
 	sf::FloatRect other_position=other_tile.getGlobalBounds();

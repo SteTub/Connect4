@@ -25,20 +25,20 @@ class Tile : public sf::CircleShape
 	double getMySpeed() const;
 	int getRowPosition() const;
 	int getColumnPosition() const;
-	bool isMoving() const;
 
 	//setters
 	void setMySpeed(double new_speed);
 	void setRowPosition(int row_in);
 	void setColumnPosition(int column_in);
-	void startedMoving();
-	void finishedMoving();
 	
-	//graphics
-	void draw(sf::RenderWindow& window);
+	//movement
 	void moveLeft();
 	void moveRight();
+	void startedMoving();
+	void finishedMoving();
+	bool isMoving() const;
 
+	//collisions
 	bool intersectWith(const sf::CircleShape& other_tile) const;
 	bool checkCollisionWithTile(const sf::CircleShape &other_tile);
 	bool checkCollisionWithBase(const sf::RectangleShape &base);
