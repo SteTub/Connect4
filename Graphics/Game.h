@@ -19,9 +19,7 @@ class Game{
 		
 		void processKeyPress_PlayerChoice(int key_press);
 		void processKeyPress_ControlsChoice(int key_press);
-		void processKeyPress_PlayerTiles(int key_press);
-		void processKeyPress_PlayerOneTile(int key_press);
-		void processKeyPress_PlayerTwoTile(int key_press);
+		void processKeyPress_PlayerTiles(int key_press, int order);
 
 		//---MAKE UPDATES---//
 		void update();

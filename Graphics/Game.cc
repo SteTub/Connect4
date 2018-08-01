@@ -112,7 +112,7 @@ void Game::processEvents(){
 		}
 		
 		else if(event.type == sf::Event::KeyPressed && game_state==PLAYING){
-			processKeyPress_PlayerTiles(event.key.code);
+			processKeyPress_PlayerTiles(event.key.code, tiles%2+1);
 		}
 	}
 }
@@ -147,39 +147,24 @@ void Game::processKeyPress_ControlsChoice(int key_press){
 	}
 }
 
-void Game::processKeyPress_PlayerTiles(int key_press){
-	if(isPlayerOneHuman() && tiles%2==0)
-		processKeyPress_PlayerOneTile(key_press);
-	else if(isPlayerTwoHuman() && tiles%2==1)
-		processKeyPress_PlayerTwoTile(key_press);
-}
+void Game::processKeyPress_PlayerTiles(int key_press, int order){
 
-void Game::processKeyPress_PlayerOneTile(int key_press){
-		
-	if(key_press==p1_controls.left){
+	controls player_controls;
+
+	if(order == 1)
+		player_controls = p1_controls;
+	else if(order == 2)
+		player_controls = p2_controls;
+	
+	if(key_press==player_controls.left){
 		board.moveTileLeft();
 	}
-	else if(key_press==p1_controls.right){
+	else if(key_press==player_controls.right){
 		board.moveTileRight();
 	}
-	else if(key_press==p1_controls.down && !board.columnFull(board.getTilePosition_Column())){
+	else if(key_press==player_controls.down && !board.columnFull(board.getTilePosition_Column())){
 		if(!board.isTileMoving()){
 			board.insertInColumn(board.getTilePosition_Column(),1);
-			reset_clock=true;	
-		}
-	}
-}
-void Game::processKeyPress_PlayerTwoTile(int key_press){
-		
-	if(key_press==p2_controls.left){
-		board.moveTileLeft();
-	}
-	else if(key_press==p2_controls.right){
-		board.moveTileRight();
-	}
-	else if(key_press==p2_controls.down && !board.columnFull(board.getTilePosition_Column())){
-		if(!board.isTileMoving()){
-			board.insertInColumn(board.getTilePosition_Column(),2);
 			reset_clock=true;	
 		}
 	}
