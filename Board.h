@@ -21,10 +21,12 @@ public:
 
 	char& operator()(const int row_in, const int col_in) const;
 	
-	int row_size() const;	
-	int col_size() const;
-	char firstTile() const;
-	char secondTile() const;
+	int getNumberOfRows() const;	
+	int getNumberOfCols() const;	
+	char getFirstTile() const;
+	char getSecondTile() const;
+
+	void makeMoveForPlayer(int selection, char player_type, char player_tile);	
 	
 	int columnFull(int col) const;		
 	void insertInColumn(int col, char tile) const;	

@@ -22,16 +22,16 @@ Board::Board(const Board& board_in) : nrows(board_in.nrows), ncols(board_in.ncol
 Board::~Board() { delete[] elem; } //deallocates
 
 //SIZES
-int Board::row_size() const{
+int Board::getNumberOfRows() const{
 	return nrows;
 }
-int Board::col_size() const{
+int Board::getNumberOfCols() const{
 	return ncols;
 }
-char Board::firstTile() const{
+char Board::getFirstTile() const{
 	return tile_1;
 }
-char Board::secondTile() const{
+char Board::getSecondTile() const{
 	return tile_2;
 }
 
@@ -57,6 +57,15 @@ char& Board::operator()(const int row_in, const int col_in) const
 	//To access a specific element, simply give the (row, col)
 			
 	return elem[(row_in-1)*ncols + (col_in-1)];
+}
+
+void Board::makeMoveForPlayer(int selection, char player_type, char player_tile)
+{
+	if(player_type == 'A')
+		usleep(400000);
+		
+	insertInColumn(selection,player_tile);
+	fancyPrint(selection, player_tile);
 }
 
 //---DETECT IF COLUMN IS FULL---//
