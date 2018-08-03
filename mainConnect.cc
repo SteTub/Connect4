@@ -23,36 +23,38 @@ int main()
 	
 	//----INITIALIZATION---//
 	//initialize board and players
-	Board Game(rows, cols);
+	Board board(rows, cols);
 	Player* one = Player::createPlayer(player_1,'0',1);
 	Player* two = Player::createPlayer(player_2,'O',2);
 
 	//test board
 /*
-	Game(6,1)=' ';Game(6,2)=' ';Game(6,3)=' ';Game(6,4)=' ';Game(6,5)=' ';Game(6,6)='O';Game(6,7)=' ';
-	Game(5,1)=' ';Game(5,2)=' ';Game(5,3)=' ';Game(5,4)='O';Game(5,5)=' ';Game(5,6)='O';Game(5,7)=' ';
-	Game(4,1)=' ';Game(4,2)=' ';Game(4,3)=' ';Game(4,4)='O';Game(4,5)=' ';Game(4,6)='O';Game(4,7)=' ';
-	Game(3,1)=' ';Game(3,2)=' ';Game(3,3)=' ';Game(3,4)='O';Game(3,5)=' ';Game(3,6)='O';Game(3,7)=' ';
-	Game(2,1)=' ';Game(2,2)=' ';Game(2,3)=' ';Game(2,4)='O';Game(2,5)=' ';Game(2,6)='O';Game(2,7)=' ';
-	Game(1,1)=' ';Game(1,2)='O';Game(1,3)=' ';Game(1,4)='O';Game(1,5)=' ';Game(1,6)='O';Game(1,7)=' ';
+	board(6,1)=' ';board(6,2)=' ';board(6,3)=' ';board(6,4)=' ';board(6,5)=' ';board(6,6)=' ';board(6,7)=' ';
+	board(5,1)=' ';board(5,2)=' ';board(5,3)=' ';board(5,4)=' ';board(5,5)=' ';board(5,6)=' ';board(5,7)=' ';
+	board(4,1)=' ';board(4,2)=' ';board(4,3)=' ';board(4,4)=' ';board(4,5)=' ';board(4,6)=' ';board(4,7)=' ';
+	board(3,1)=' ';board(3,2)='0';board(3,3)='0';board(3,4)='0';board(3,5)=' ';board(3,6)=' ';board(3,7)=' ';
+	board(2,1)=' ';board(2,2)='O';board(2,3)='0';board(2,4)='O';board(2,5)=' ';board(2,6)=' ';board(2,7)=' ';
+	board(1,1)='0';board(1,2)='O';board(1,3)='O';board(1,4)='O';board(1,5)='0';board(1,6)=' ';board(1,7)=' ';
 */
 
 	//---BEGIN GAME---//
 	printTitle();
-	Game.printBoard();
+	board.printBoard();
 				
 	for(int ply=0;ply<42;++ply){	
 		
 		if(ply%2==0){
-			one->makeMove(Game);
-			if(Game.detectWin(1)){		
+			one->makeMove(board);
+	//		board.makeMoveForPlayer(selection,player_1,'0');
+			if(board.detectWin(1)){		
 				win_tile='0';
 				break;
 			}
 		}
 		else{
-		 	two->makeMove(Game);
-			if(Game.detectWin(2)){
+		 	two->makeMove(board);
+	//		board.makeMoveForPlayer(selection,player_2,'O');
+			if(board.detectWin(2)){
 				win_tile='O';
 				break;
 			}
@@ -60,10 +62,10 @@ int main()
 	}
 
 	if(win_tile == '0'){
-		Game.printWinFlash(1);
+		board.printWinFlash(1);
 	}
 	else if(win_tile == 'O'){ 
-		Game.printWinFlash(2);
+		board.printWinFlash(2);
 	}
 	else{
 		std::cout << "Stalemate, Better Luck Next Time\n";
