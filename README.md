@@ -1,5 +1,6 @@
 # Connect4
 
+This portion of the code is deprecated.
 I encourage you to look at/try the graphical version, in the "Graphics" directory
 This version displays the board in terminal using ASCII characters 
 
