@@ -17,7 +17,7 @@ Human::Human(char tile, int player_num)
 	 player_no=player_num;
 }
 
-int Human::makeMove(Board &board){return 0;} //this does nothing on purpose
+int Human::makeMove(const Board &board){return 0;} //this does nothing on purpose
 
 //=======AI PLAYER=======//
 
@@ -34,7 +34,7 @@ char AI_player::returnMyTile() const{
 }
 
 //---MAKES THE MOVE USING STRATEGY---//
-int AI_player::makeMove(Board &board)
+int AI_player::makeMove(const Board &board)
 {	
 	//choose column based on strategy
 	int selection = chooseColumnUsingStrategy(board);
@@ -43,50 +43,135 @@ int AI_player::makeMove(Board &board)
 	while(board.columnFull(selection)){
 		selection = 1+(rand() %  board.getNumberOfCols());
 	}
-	
-	//insert into board
-//	usleep(400000);
-//	board.insertInColumn(selection,player_no);
-//	board.fancyPrint(selection,my_tile);
 	return selection;
 }
 
 //---DETERMINE STRATEGY---//
 int AI_player::chooseColumnUsingStrategy(const Board &board)
 {
-	int ncols = board.getNumberOfCols();
-	int col = 0;
+	int column_choice = 0;
 	char enemy_tile = board.getFirstTile();
 	if(player_no == 1)
 		enemy_tile = board.getSecondTile();
 
 	//TRY TO WIN
-	if(findWinningMove(board, my_tile) < ncols+1){		//if found 3 and can win, will win
-		col = findWinningMove(board, my_tile);
-	}	
-
+	if(column_choice==0)
+		column_choice = findWinningMove(board, my_tile);
 	//BLOCK AN OPPONENTS WIN
-	else if(findWinningMove(board, enemy_tile) < ncols+1){	//if opponent has 3 in row, block opponents win
-		col = findWinningMove(board, enemy_tile);
-	}	
+	if(column_choice==0)
+		column_choice = findWinningMove(board, enemy_tile);
+	//ATTACK - PLAY A POSITION WHICH GUARANTEES A WIN
+//	if(column_choice==0)
+//		column_choice = findGuaranteedWin(board,my_tile);
+	//BLOCK GUARANTEED WINNING POSITION - two win options
+	if(column_choice==0)
+		column_choice = findGuaranteedWin(board, enemy_tile);
 	//Prevent a 3 in a horizontal row
-	else if(findHorizontalPair(board, enemy_tile) < ncols+1){	//cut off opponent trap, if opponent has 2 in a row, will play next to one
-		col = findHorizontalPair(board, enemy_tile);
-	
-		if(choiceWouldCauseLoss(board, col+1, my_tile, enemy_tile)){	//avoid giving opponent the win
-			col = 0;
+	//has been replaced by findGuaranteedWin()
+/*
+	if(column_choice==0){
+		column_choice = findHorizontalPair(board, enemy_tile);
+
+		if(choiceWouldCauseLoss(board, column_choice+1)){	//avoid giving opponent the win
+			column_choice = 0;
 		}
 	}
+*/
 	//If the above three fail then picks random	
-	if(col == 0){
-		col = chooseRandomColumnGaussian(board, my_tile, enemy_tile);
+	if(column_choice == 0){
+		column_choice = chooseRandomCol_Weighted(board);
 	} 
 
-	return col;
+	return column_choice;
+}
+
+int AI_player::findGuaranteedWin(const Board &board, char tile){
+
+	char enemy_tile=(tile=='1') ? '2' : '1';
+	//check each column prioritising the middle
+	int columns[7] = {4,3,5,2,6,1,7};
+	
+	for(auto column : columns){
+
+		Board test_board = board;
+		test_board.insertTileInColumn(column, tile);
+	
+		//if playing current tile provides a winning move
+		if(findWinningMove(test_board, tile) != 0){
+		
+			//anticipate opponent blocking the win
+			test_board.insertTileInColumn(findWinningMove(test_board,tile),enemy_tile);
+
+			//if after the opponent has blocked a win, there is still a win, then return initial column choice
+			if(findWinningMove(test_board,tile)!=0){
+				if(!choiceWouldCauseLoss(board, column)){
+					return column;
+				}
+			}
+
+		}
+	}
+
+	return 0;
+}
+
+int AI_player::findGuaranteedWin_Opponent(const Board &board){
+
+	char enemy_tile=(my_tile=='1') ? '2' : '1';
+
+	for(int column=1;column<=7;++column){
+
+		Board test_board = board;
+		test_board.insertTileInColumn(column,my_tile);
+
+		if(findGuaranteedWin(test_board,enemy_tile))
+			return column;
+	}
+
+	return 0;
 }
 
 //---IF NO OTHER OPTION, PRIORITIZES MIDDLE---//
-int AI_player::chooseRandomColumnGaussian(const Board &board, char tile, char enemy_tile)
+int AI_player::chooseRandomCol_Weighted(const Board &board)
+{
+	//set up column weights
+	//values come from binomial distribution with n=6 and p=0.5
+	int ncols = board.getNumberOfCols();
+	std::array<int, 7> column_weights = {5,30,75,120,75,30,5};
+	
+	//if column is full or would result in loss then set weight to zero 
+	for(int column=1;column<=ncols;++column){
+
+		if(board.columnFull(column))
+			column_weights[column-1] = 0;
+
+		else if(choiceWouldCauseLoss(board,column))
+			column_weights[column-1] = 0;	
+	}
+	//if there are no possible outcomes, it will play a losing tile
+	if(std::accumulate(column_weights.begin(),column_weights.end(),0)==0){
+	
+		for(int column=1;column<=ncols;++column){
+			if(choiceWouldCauseLoss(board,column))
+				column_weights[column-1] = 100;
+		}		
+	}
+
+//	std::cout << "{";
+//	for(int i=0;i<7;++i)
+//		std::cout << column_weights[i] << ", ";
+//	std::cout << "}\n";
+
+	std::discrete_distribution<int> column_weights_dist(column_weights.begin(), column_weights.end());
+	std::random_device rd;
+	std::mt19937 generator(rd());
+
+	int col_choice = column_weights_dist(generator);
+
+	return col_choice+1;		//change column to human readability
+}
+
+int AI_player::chooseRandomCol_Gaussian(const Board &board)
 {
 	int ncols = board.getNumberOfCols();
 	int mid = ncols/2;
@@ -110,7 +195,7 @@ int AI_player::chooseRandomColumnGaussian(const Board &board, char tile, char en
 	}
 
 	//check if chosen column would create winning scenario for opponent
-	while(choiceWouldCauseLoss(board, col+1, tile, enemy_tile))
+	while(choiceWouldCauseLoss(board, col+1))
 	{
 		int count=0;
 		col = std::round(distrib(generator));
@@ -121,33 +206,45 @@ int AI_player::chooseRandomColumnGaussian(const Board &board, char tile, char en
 	}
 
 	return col+1;		//change column to human readability
-
 }
 
 //---CHECK IF CHOSEN COLUMN CREATES A WINNING SCENARIO FOR OPPONENT---//
-int AI_player::choiceWouldCauseLoss(const Board &board, int col, char tile, char enemy_tile)
+int AI_player::choiceWouldCauseLoss(const Board &board, int col)
 {
-	Board test_game = board;
-	test_game.insertInColumn(col, tile);
+	//get opponents tile
+	char enemy_tile;
+	if(player_no == 1)
+		enemy_tile = board.getSecondTile();
+	else if(player_no == 2)
+		enemy_tile = board.getFirstTile();
+
+	//enter current selection in test board
+	Board test_board = board;
+	test_board.insertTileInColumn(col, my_tile);
+
+//	std::cout << "******************\n";
+//	test_board.printBoard();
+//	std::cout << "******************\n";
 
 	//CHECK FOR WIN
-	if(findWinningMove(test_game, enemy_tile) < test_game.getNumberOfCols())		//if found 3 and can win, will win
+	if(findWinningMove(test_board, enemy_tile) != 0){		//if found 3 and can win, will win
+	//	std::cout << "found winning move at " << findWinningMove(test_board,enemy_tile) << std::endl;
 		return 1;
-	
+	}
+
 	return 0;
 }
 
 //Find two tiles in a row to set up or stop a trap
 int AI_player::findHorizontalPair(const Board &board, char tile)
 {
-	
 	int row = board.getNumberOfRows();
 	int col = board.getNumberOfCols();
 
 	for(int i=1;i<=row;i++){
-		for(int j=2;j<=(col-3);j++){
+		for(int j=2;j<=(col-2);j++){
+			//if find a horizontal pair with space on either side
 			if(board(i,j) == tile && board(i,j+1) == tile && board(i,j-1)==' '&& board(i,j+2)==' '){
-
 				//bottom row
 				if(i==1){
 					//prioritize the space closer to the middle
@@ -170,7 +267,7 @@ int AI_player::findHorizontalPair(const Board &board, char tile)
 			}
 		}
 	}
-	return board.getNumberOfCols()+1;
+	return 0;
 }
 //---FIND THREE TILES WHERE FOURTH TILE WOULD WIN---//
 //This is just a sea of if-else statements
@@ -345,5 +442,5 @@ int AI_player::findWinningMove(const Board &board, char tile)
 			}
 		}
 	}
-	return ncols+1;
+	return 0;
 }	
