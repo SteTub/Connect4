@@ -51,6 +51,16 @@ void Game::init(){
 	p2_controls.left = sf::Keyboard::A;
 	p2_controls.right = sf::Keyboard::D;
 	p2_controls.down = sf::Keyboard::S;
+
+	//test board
+/*
+	board(6,1)=' ';board(6,2)=' ';board(6,3)=' ';board(6,4)=' ';board(6,5)=' ';board(6,6)=' ';board(6,7)=' ';
+	board(5,1)=' ';board(5,2)=' ';board(5,3)=' ';board(5,4)=' ';board(5,5)=' ';board(5,6)=' ';board(5,7)=' ';
+	board(4,1)=' ';board(4,2)=' ';board(4,3)=' ';board(4,4)=' ';board(4,5)=' ';board(4,6)=' ';board(4,7)=' ';
+	board(3,1)=' ';board(3,2)=' ';board(3,3)='1';board(3,4)='1';board(3,5)=' ';board(3,6)=' ';board(3,7)=' ';
+	board(2,1)=' ';board(2,2)=' ';board(2,3)='1';board(2,4)='2';board(2,5)='2';board(2,6)='1';board(2,7)=' ';
+	board(1,1)=' ';board(1,2)=' ';board(1,3)='2';board(1,4)='1';board(1,5)='1';board(1,6)='2';board(1,7)=' ';
+*/
 }
 
 void Game::run(){
@@ -150,12 +160,16 @@ void Game::processKeyPress_ControlsChoice(int key_press){
 void Game::processKeyPress_PlayerTiles(int key_press, int order){
 
 	controls player_controls;
+	char tile;
 
-	if(order == 1)
+	if(order == 1){
 		player_controls = p1_controls;
-	else if(order == 2)
+		tile = '1';
+	}
+	else if(order == 2){
 		player_controls = p2_controls;
-	
+		tile = '2';
+	}
 	if(key_press==player_controls.left){
 		board.moveTileLeft();
 	}
@@ -164,7 +178,7 @@ void Game::processKeyPress_PlayerTiles(int key_press, int order){
 	}
 	else if(key_press==player_controls.down && !board.columnFull(board.getTilePosition_Column())){
 		if(!board.isTileMoving()){
-			board.insertInColumn(board.getTilePosition_Column(),1);
+			board.insertTileInColumn(board.getTilePosition_Column(),tile);
 			reset_clock=true;	
 		}
 	}
@@ -229,10 +243,14 @@ void Game::makeAISelection(){
 		reset_clock = false;
 	}
 
+	char tile = '1';
+	if(tiles%2==1)
+		tile = '2';
+
 	sf::Time ai_time=ai_clock.getElapsedTime();
 	if(ai_time > sf::milliseconds(300)){
 		if(board.getTilePosition_Column() == ai_selection && ai_selection > 0){		//doesn't make a move if player is human
-			board.insertInColumn(board.getTilePosition_Column(),tiles%2+1);
+			board.insertTileInColumn(board.getTilePosition_Column(),tile);
 			ai_clock.restart();
 			ai_selection = 0;
 			if(!p1_human && !p2_human)
@@ -285,8 +303,8 @@ void Game::setPlayersAndControls(){
 	if(menu.playerChoseWASD()){
 		switchPlayerControls();
 	}
-	one = Player::createPlayer(p1_choice,'1',1);		
-	two = Player::createPlayer(p2_choice,'2',2);		
+	one = Player::createPlayer(p1_choice,'1',1);
+	two = Player::createPlayer(p2_choice,'2',2);
 }
 
 void Game::setPlayerAsHuman(){

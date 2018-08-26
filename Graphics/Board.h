@@ -41,7 +41,7 @@ class Board{
 
 	//board in memory
 	int columnFull(int col) const;
-	void insertInColumn(int col, int order);
+	void insertTileInColumn(int col, char tile);
 	int detectWin(int order) const;
 	void printBoard() const;
 		

@@ -56,7 +56,6 @@ void Tile::setColumnPosition(int column_in){
 //---MOVEMENT---//
 
 void Tile::moveLeft(){
-
 	if(!moving){
 		if(col_position > 1){
 			--col_position;

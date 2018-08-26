@@ -128,12 +128,9 @@ int Board::columnFull(int col) const
 	return 0;
 }
 
-void Board::insertInColumn(int col, int order)
+void Board::insertTileInColumn(int col, char tile)
 {
 	int row=1;
-	char tile='1';
-	if(order==2)
-		tile='2';
 
 	if(columnFull(col))
 		return;
