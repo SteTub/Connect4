@@ -95,28 +95,41 @@ int Board::getTilePosition_Column() const{
 	return tiles.back().getColumnPosition(); 
 }
 
-void Board::tileDropping(sf::Int32 update_time){
-	//speed is in units/ms, where 1 unit = 60 pixels
-	tiles.back().setMySpeed(tiles.back().getMySpeed()+9.8*update_time*240.0/MILLION);	//240 is constant to modify acceleration
-	tiles.back().move(0,+tiles.back().getMySpeed()*update_time);
+void Board::checkForCollisions(Tile &dropping_tile){
 
-	if(tiles.back().checkCollisionWithBase(base)){ 	//bottom row
-		while(tiles.back().checkCollisionWithBase(base)){		
-			tiles.back().move(0,-0.1);
+	if(dropping_tile.checkCollisionWithBase(base)){ 	
+		while(dropping_tile.checkCollisionWithBase(base)){		
+			dropping_tile.move(0,-0.1);		//move tile up pixel by pixel until no longer colliding
 		}
-		finishDroppingTile();
+		//if collision, if speed is low, then stop, else rebound 
+		if(dropping_tile.getMySpeed() < 0.05)
+			finishDroppingTile();
+		else dropping_tile.setMySpeed(dropping_tile.getMySpeed()*(-0.35));
 	}
 	else{
-		for(int i=tiles.size()-2;i>-1;--i){
-			if(tiles.back().checkCollisionWithTile(tiles[i])){		
-				while(tiles.back().checkCollisionWithTile(tiles[i])){		
-					tiles.back().move(0,-0.1);
+		for(int i=tiles.size()-2;i>-1;--i){		//iterate through tiles from most to least recent
+			if(dropping_tile.checkCollisionWithTile(tiles[i])){		
+				while(dropping_tile.checkCollisionWithTile(tiles[i])){		
+					dropping_tile.move(0,-0.1);
 				}	
-			finishDroppingTile();
+			//if collision, if speed is low, then stop, else rebound 
+			if(dropping_tile.getMySpeed() < 0.05)
+				finishDroppingTile();
+			else dropping_tile.setMySpeed(dropping_tile.getMySpeed()*(-0.35));
+			
 			break;
 			}
 		}
 	}
+}
+
+void Board::tileDropping(sf::Int32 update_time){
+	//speed is in units/ms, where 1 unit = 60 pixels
+//	tiles.back().setMySpeed(tiles.back().getMySpeed()+9.8*update_time/(1000));		//actual speed too fast
+	tiles.back().setMySpeed(tiles.back().getMySpeed()+9.8*update_time*240.0/MILLION);	//240 is constant to modify acceleration
+	tiles.back().move(0,+tiles.back().getMySpeed()*update_time);
+
+	checkForCollisions(tiles.back());
 }
 
 //---BOARD IN MEMORY---//
@@ -236,11 +249,7 @@ void Board::printBoard() const{
 void Board::draw(sf::RenderWindow& window) const{
 
 	drawTiles(window);
-	for(int row=0;row<6;++row)
-		for(int column=0;column<7;++column)
-			drawUnit(window, row, column);
-
-	//draw base
+	drawGrid(window);
 	window.draw(base);
 	drawOutline(window);	
 }
@@ -248,6 +257,12 @@ void Board::draw(sf::RenderWindow& window) const{
 void Board::drawTiles(sf::RenderWindow& window) const{
 	for(auto tile: tiles)
 		window.draw(tile);
+}
+
+void Board::drawGrid(sf::RenderWindow& window) const{
+	for(int row=0;row<6;++row)
+		for(int column=0;column<7;++column)
+			drawUnit(window, row, column);
 }
 
 void Board::drawOutline(sf::RenderWindow& window) const{

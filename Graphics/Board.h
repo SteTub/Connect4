@@ -37,6 +37,7 @@ class Board{
 	void finishDroppingTile();
 	bool isTileMoving() const;
 	int getTilePosition_Column() const;
+	void checkForCollisions(Tile &dropping_tile);
 	void tileDropping(sf::Int32 update_time);
 
 	//board in memory
@@ -49,6 +50,7 @@ class Board{
 	void draw(sf::RenderWindow& window) const;
 	void drawTiles(sf::RenderWindow& window) const;
 	void drawUnit(sf::RenderWindow& window, int row, int column) const;
+	void drawGrid(sf::RenderWindow& window) const; 
 	void drawBase(sf::RenderWindow& window) const;
 	void drawOutline(sf::RenderWindow& window) const;
 
