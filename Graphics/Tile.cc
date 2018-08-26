@@ -90,6 +90,7 @@ bool Tile::intersectWith(const sf::CircleShape &other_tile) const{
 
 	return my_position.intersects(other_position);
 }
+
 bool Tile::checkCollisionWithTile(const sf::CircleShape &other_tile){
 	
 	if(intersectWith(other_tile)){
