@@ -102,7 +102,7 @@ void Board::checkForCollisions(Tile &dropping_tile){
 			dropping_tile.move(0,-0.1);		//move tile up pixel by pixel until no longer colliding
 		}
 		//if collision, if speed is low, then stop, else rebound 
-		if(dropping_tile.getMySpeed() < 0.05)
+		if(dropping_tile.getMySpeed() < 0.5)
 			finishDroppingTile();
 		else dropping_tile.setMySpeed(dropping_tile.getMySpeed()*(-0.35));
 	}
@@ -113,7 +113,7 @@ void Board::checkForCollisions(Tile &dropping_tile){
 					dropping_tile.move(0,-0.1);
 				}	
 			//if collision, if speed is low, then stop, else rebound 
-			if(dropping_tile.getMySpeed() < 0.05)
+			if(dropping_tile.getMySpeed() < 0.5)
 				finishDroppingTile();
 			else dropping_tile.setMySpeed(dropping_tile.getMySpeed()*(-0.35));
 			
