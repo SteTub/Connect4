@@ -41,7 +41,10 @@ class Game{
 
 		//---REMATCH---//
 		void rematch();
-	
+
+		//---CLEAR MEMORY---//
+		void cleanPlayerMemory();
+
 	private:
 		int game_state;
 		bool first_time;

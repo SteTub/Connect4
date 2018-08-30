@@ -111,8 +111,10 @@ void Game::processEvents(){
 		
 	while(window.pollEvent(event))
 	{
-		if(event.type == sf::Event::Closed)
+		if(event.type == sf::Event::Closed){
 			window.close();
+			cleanPlayerMemory();
+		}
 		else if(event.type == sf::Event::KeyPressed && game_state==INTRO){
 			moveToNextGameState();
 		}
@@ -370,4 +372,12 @@ void Game::rematch(){
 	restart_game=false;
 
 	board.resetBoard();
+}
+
+void Game::cleanPlayerMemory(){
+	if(game_state > CONTROLS){
+		delete one;
+		delete two;	
+	}
+	return;
 }
