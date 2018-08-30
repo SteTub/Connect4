@@ -39,15 +39,16 @@ class Menu{
 
 	//---WINNING SCREEN---//
 	void initWinningScreen();
+	void initRematch();
 	void drawEndingScreen(sf::RenderWindow& window, int winning_player) const;
-
+	
 	private:
 //		int current_selection;
 
 		bool at_human_choice;
 		sf::RectangleShape human_box, AI_box;
 		Tile menu_tile;
-		sf::Text title, start, select_p1, select_p2, human, AI, winner, winner2, stale;
+		sf::Text title, start, select_p1, select_p2, human, AI, winner, winner2, stale, rematch;
 		sf::Font font;
 		sf::Text controls;
 		sf::Texture wasd_texture, arrows_texture;

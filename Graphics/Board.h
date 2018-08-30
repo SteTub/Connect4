@@ -27,7 +27,7 @@ class Board{
 	char getSecondTile() const;
 	int getNumberOfRows() const;
 	int getNumberOfCols() const;
-	
+
 	//tile interaction
 	void createTile();	
 	bool needNewTile();
@@ -45,6 +45,7 @@ class Board{
 	void insertTileInColumn(int col, char tile);
 	int detectWin(int order) const;
 	void printBoard() const;
+	void resetBoard();
 		
 	//draw
 	void draw(sf::RenderWindow& window) const;

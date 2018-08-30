@@ -245,6 +245,16 @@ void Board::printBoard() const{
 	std::cout << "\n---------------------------------------------\n";
 }
 
+void Board::resetBoard(){
+
+	for(int row=1;row<=rows;++row)
+		for(int col=1;col<=columns;++col)
+			(*this)(row,col)=' ';
+	
+	tiles.clear();
+	new_tile_needed=true;
+}
+
 //---DRAW TO SCREEN---//
 void Board::draw(sf::RenderWindow& window) const{
 

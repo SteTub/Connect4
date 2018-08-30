@@ -16,6 +16,7 @@ void Menu::initMenu(){
 	initMenuTile(0);
 	initControlChoice();
 	initWinningScreen();
+	initRematch();
 }
 void Menu::initFont(){
 
@@ -310,25 +311,36 @@ void Menu::resetTextForControlChoice(bool player_1_human,bool player_2_human){
 //---WINNING SCREEN---//
 void Menu::initWinningScreen(){
 
-	//PLAYER 1 SELECT
+	//PLAYER 1 WINNER
 	winner.setString("Player 1 wins!");
 	winner.setFont(font);
 	winner.setCharacterSize(40);
-	winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	//winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
 	winner.setColor(sf::Color::Red);
-	//PLAYER 2 SELECT 
+	//PLAYER 2 WINNER 
 	winner2.setString("Player 2 wins!");
 	winner2.setFont(font);
 	winner2.setCharacterSize(40);
-	winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
 	winner2.setColor(sf::Color::Yellow);
-
-	//PLAYER 2 SELECT 
+	//STALEMATE 
 	stale.setString("STALEMATE");
 	stale.setFont(font);
 	stale.setCharacterSize(40);
-	stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
 	stale.setColor(sf::Color::White);	
+}
+
+void Menu::initRematch(){
+
+	//REMATCH
+	rematch.setString("Press 'R' for Rematch");
+	rematch.setFont(font);
+	rematch.setCharacterSize(30);
+	rematch.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
+	rematch.setColor(sf::Color::White);
+
 }
 
 void Menu::drawEndingScreen(sf::RenderWindow& window, int winning_player) const{
@@ -344,6 +356,7 @@ void Menu::drawEndingScreen(sf::RenderWindow& window, int winning_player) const{
 		window.draw(winner2);
 		break;
 	}
+	window.draw(rematch);
 }
 
 

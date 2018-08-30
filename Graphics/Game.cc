@@ -44,6 +44,8 @@ void Game::init(){
 
 	result=0;
 
+	restart_game = false;	
+
 	//set control scheme
 	p1_controls.left = sf::Keyboard::Left;
 	p1_controls.right = sf::Keyboard::Right;
@@ -59,7 +61,7 @@ void Game::init(){
 	board(4,1)=' ';board(4,2)=' ';board(4,3)=' ';board(4,4)=' ';board(4,5)=' ';board(4,6)=' ';board(4,7)=' ';
 	board(3,1)=' ';board(3,2)=' ';board(3,3)='1';board(3,4)='1';board(3,5)=' ';board(3,6)=' ';board(3,7)=' ';
 	board(2,1)=' ';board(2,2)=' ';board(2,3)='1';board(2,4)='2';board(2,5)='2';board(2,6)='1';board(2,7)=' ';
-	board(1,1)=' ';board(1,2)=' ';board(1,3)='2';board(1,4)='1';board(1,5)='1';board(1,6)='2';board(1,7)=' ';
+	board(1,1)='L';board(1,2)=' ';board(1,3)='2';board(1,4)='1';board(1,5)='1';board(1,6)='2';board(1,7)=' ';
 */
 }
 
@@ -123,6 +125,10 @@ void Game::processEvents(){
 		
 		else if(event.type == sf::Event::KeyPressed && game_state==PLAYING){
 			processKeyPress_PlayerTiles(event.key.code, tiles%2+1);
+		}
+		else if(event.type == sf::Event::KeyPressed && game_state==ENDING){
+			if(event.key.code==sf::Keyboard::R)
+				rematch();
 		}
 	}
 }
@@ -198,7 +204,8 @@ void Game::update(){
 	if(game_state == CONTROLS && reset_control_text){
 		reset_control_text=false;
 		menu.resetTextForControlChoice(p1_human,p2_human);
-	}	
+	}
+	//check if game over before creating new tile	
 	if(game_state == PLAYING && !board.isTileMoving()){
 		checkForGameOver();
 	}
@@ -210,6 +217,10 @@ void Game::update(){
 	if(game_state==PLAYING && !board.isTileMoving()){
 		makeAISelection();
 	}
+	//reset game
+	if(game_state==ENDING && restart_game==true)
+		rematch();
+
 	updateDroppingTile();
 }
 
@@ -344,4 +355,19 @@ void Game::switchPlayerControls(){
 		p2_controls.down = sf::Keyboard::S;
 	}
 
+}
+
+//----REMATCH----//
+void Game::rematch(){
+	
+	//INIT VALUES
+	game_state = PLAYING;
+	first_time=true;
+	reset_control_text=true;
+	tiles=-1;	 
+
+	reset_clock = true;
+	restart_game=false;
+
+	board.resetBoard();
 }

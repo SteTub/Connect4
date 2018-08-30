@@ -16,7 +16,6 @@ class Game{
 
 		//---PROCESS EVENTS---//
 		void processEvents();
-		
 		void processKeyPress_PlayerChoice(int key_press);
 		void processKeyPress_ControlsChoice(int key_press);
 		void processKeyPress_PlayerTiles(int key_press, int order);
@@ -39,6 +38,9 @@ class Game{
 		void setPlayerOneHuman(); 
 		void setPlayerTwoHuman(); 
 		void switchPlayerControls();
+
+		//---REMATCH---//
+		void rematch();
 	
 	private:
 		int game_state;
@@ -49,7 +51,6 @@ class Game{
 		bool reset_clock;
 		int ai_selection;
 		sf::RenderWindow window;
-		
 		Board board;
 		Player* one;
 		Player* two;
@@ -63,7 +64,8 @@ class Game{
 		sf::Sprite background;
 		bool p1_human, p2_human;
 		int result;
-		
+		bool restart_game;	
+	
 		enum state{INTRO,P1_SELECT,P2_SELECT,CONTROLS,PLAYING,ENDING};
 
 		struct controls{
