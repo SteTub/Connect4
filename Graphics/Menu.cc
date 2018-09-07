@@ -34,14 +34,14 @@ void Menu::initTitleScreen(){
 	title.setFont(font);
 	title.setCharacterSize(70);
 	title.setPosition(WINDOW_WIDTH/2-title.getGlobalBounds().width/2,100);
-	title.setColor(sf::Color::Blue);
+	title.setFillColor(sf::Color::Blue);
 
 	//PRESS KEY TO START
 	start.setString("Press any key to start");
 	start.setFont(font);
 	start.setCharacterSize(30);
 	start.setPosition(WINDOW_WIDTH/2-start.getGlobalBounds().width/2,400);
-	start.setColor(sf::Color::White);
+	start.setFillColor(sf::Color::White);
 
 }
 
@@ -60,13 +60,13 @@ void Menu::initPlayerSelectionScreen(){
 	select_p1.setFont(font);
 	select_p1.setCharacterSize(40);
 	select_p1.setPosition(WINDOW_WIDTH/2-select_p1.getGlobalBounds().width/2,100);
-	select_p1.setColor(sf::Color::White);
+	select_p1.setFillColor(sf::Color::White);
 	//PLAYER 2 SELECT 
 	select_p2.setString("Would you like\nplayer 2 to be:");
 	select_p2.setFont(font);
 	select_p2.setCharacterSize(40);
 	select_p2.setPosition(WINDOW_WIDTH/2-select_p2.getGlobalBounds().width/2,100);
-	select_p2.setColor(sf::Color::White);
+	select_p2.setFillColor(sf::Color::White);
 
 	//HUMAN CHOICE - BACKGROUND BOX
 	human_box.setSize(sf::Vector2f(3*WINDOW_WIDTH/10.0,1*WINDOW_HEIGHT/10.0));
@@ -83,7 +83,7 @@ void Menu::initPlayerSelectionScreen(){
 	double human_height = human.getGlobalBounds().height;
 	human.setOrigin(sf::Vector2f(human_width/2.0,human_height/2.0));
 	human.setPosition(6*WINDOW_WIDTH/10.0,5*WINDOW_HEIGHT/10.0-10);
-	human.setColor(sf::Color::Black);
+	human.setFillColor(sf::Color::Black);
 	
 	//AI CHOICE - BACKGROUND BOX
 	AI_box.setSize(sf::Vector2f(3*WINDOW_WIDTH/10.0,1*WINDOW_HEIGHT/10.0));
@@ -100,7 +100,7 @@ void Menu::initPlayerSelectionScreen(){
 	double AI_height = AI.getGlobalBounds().height;
 	AI.setOrigin(sf::Vector2f(AI_width/2.0,AI_height/2.0));
 	AI.setPosition(6*WINDOW_WIDTH/10.0,7*WINDOW_HEIGHT/10.0-10);
-	AI.setColor(sf::Color::Black);
+	AI.setFillColor(sf::Color::Black);
 }
 
 void Menu::drawPlayerSelectionScreen(sf::RenderWindow& window, int player) const{
@@ -216,7 +216,7 @@ void Menu::initControlChoice(){
 	controls.setFont(font);
 	controls.setCharacterSize(40);
 	controls.setPosition(WINDOW_WIDTH/2-controls.getGlobalBounds().width/2,100);
-	controls.setColor(sf::Color::White);
+	controls.setFillColor(sf::Color::White);
 	
 	//WASD 
 	if(!wasd_texture.loadFromFile("wasd2.jpg", sf::IntRect(0,0,220,151))){
@@ -251,13 +251,13 @@ void Menu::initControlChoice(){
 	p1_controls_text.setFont(font);
 	p1_controls_text.setCharacterSize(20);
 	p1_controls_text.setPosition((1*WINDOW_WIDTH/10.0)+105,(5*WINDOW_HEIGHT/10.0)+180);
-	p1_controls_text.setColor(sf::Color::Red);	
+	p1_controls_text.setFillColor(sf::Color::Red);	
 	//Player 2 text
 	p2_controls_text.setString("P2");
 	p2_controls_text.setFont(font);
 	p2_controls_text.setCharacterSize(20);
 	p2_controls_text.setPosition((6*WINDOW_WIDTH/10.0)+105,(5*WINDOW_HEIGHT/10.0)+180);
-	p2_controls_text.setColor(sf::Color::Yellow);	
+	p2_controls_text.setFillColor(sf::Color::Yellow);	
 }
 
 void Menu::drawControlChoice(sf::RenderWindow& window, bool player_1_human,bool player_2_human){
@@ -304,7 +304,7 @@ bool Menu::playerChoseWASD() const{
 void Menu::resetTextForControlChoice(bool player_1_human,bool player_2_human){
 
 	if(!player_1_human && player_2_human){
-		p1_controls_text.setColor(sf::Color::Yellow);
+		p1_controls_text.setFillColor(sf::Color::Yellow);
 	}
 }
 
@@ -317,19 +317,19 @@ void Menu::initWinningScreen(){
 	winner.setCharacterSize(40);
 	//winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
 	winner.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
-	winner.setColor(sf::Color::Red);
+	winner.setFillColor(sf::Color::Red);
 	//PLAYER 2 WINNER 
 	winner2.setString("Player 2 wins!");
 	winner2.setFont(font);
 	winner2.setCharacterSize(40);
 	winner2.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
-	winner2.setColor(sf::Color::Yellow);
+	winner2.setFillColor(sf::Color::Yellow);
 	//STALEMATE 
 	stale.setString("STALEMATE");
 	stale.setFont(font);
 	stale.setCharacterSize(40);
 	stale.setPosition(WINDOW_WIDTH/2-winner2.getGlobalBounds().width/2,WINDOW_HEIGHT*0.075);
-	stale.setColor(sf::Color::White);	
+	stale.setFillColor(sf::Color::White);	
 }
 
 void Menu::initRematch(){
@@ -339,7 +339,7 @@ void Menu::initRematch(){
 	rematch.setFont(font);
 	rematch.setCharacterSize(30);
 	rematch.setPosition(WINDOW_WIDTH/2-winner.getGlobalBounds().width/2,WINDOW_HEIGHT*0.875);
-	rematch.setColor(sf::Color::White);
+	rematch.setFillColor(sf::Color::White);
 
 }
 
