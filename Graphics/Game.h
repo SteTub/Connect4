@@ -29,6 +29,7 @@ class Game{
 		void moveToNextGameState();
 
 		//---GET PLAYER TYPES---//
+		bool isPlayerHuman(int order) const;
 		bool isPlayerOneHuman() const;
 		bool isPlayerTwoHuman() const;
 

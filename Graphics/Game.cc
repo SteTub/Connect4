@@ -124,8 +124,7 @@ void Game::processEvents(){
 		else if(event.type == sf::Event::KeyPressed && game_state==CONTROLS){
 			processKeyPress_ControlsChoice(event.key.code);
 		}
-		
-		else if(event.type == sf::Event::KeyPressed && game_state==PLAYING){
+		else if(event.type == sf::Event::KeyPressed && game_state==PLAYING && isPlayerHuman(tiles%2+1)){
 			processKeyPress_PlayerTiles(event.key.code, tiles%2+1);
 		}
 		else if(event.type == sf::Event::KeyPressed && game_state==ENDING){
@@ -301,6 +300,13 @@ void Game::moveToNextGameState(){
 }
 
 //---GET PLAYER TYPES---//
+bool Game::isPlayerHuman(int order) const{
+	if(order == 1)
+		return isPlayerOneHuman();
+	else if(order == 2)
+		return isPlayerTwoHuman();
+	else return false;
+}
 bool Game::isPlayerOneHuman() const{
 	return p1_human;
 }
