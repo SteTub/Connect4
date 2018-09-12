@@ -44,6 +44,7 @@ class Board{
 	int columnFull(int col) const;
 	void insertTileInColumn(int col, char tile);
 	int detectWin(int order) const;
+	bool detectStalemate() const;
 	void printBoard() const;
 	void resetBoard();
 		

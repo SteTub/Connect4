@@ -208,6 +208,17 @@ int Board::detectWin(int order) const
 	return 0;
 }
 
+bool Board::detectStalemate() const{
+
+	for(int row=1;row<=rows;++row){
+		for(int col=1;col<=columns;++col){
+			if((*this)(row,col) == ' ')		//if there is a free space
+				return false;		//then game is still being played
+		}
+	}
+	return true;
+}
+
 void Board::printBoard() const{
 	
 	std::cout << std::endl;

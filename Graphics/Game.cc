@@ -56,12 +56,12 @@ void Game::init(){
 
 	//test board
 /*
-	board(6,1)=' ';board(6,2)=' ';board(6,3)=' ';board(6,4)=' ';board(6,5)=' ';board(6,6)=' ';board(6,7)=' ';
-	board(5,1)=' ';board(5,2)=' ';board(5,3)=' ';board(5,4)=' ';board(5,5)=' ';board(5,6)=' ';board(5,7)=' ';
-	board(4,1)=' ';board(4,2)=' ';board(4,3)=' ';board(4,4)=' ';board(4,5)=' ';board(4,6)=' ';board(4,7)=' ';
-	board(3,1)=' ';board(3,2)=' ';board(3,3)='1';board(3,4)='1';board(3,5)=' ';board(3,6)=' ';board(3,7)=' ';
-	board(2,1)=' ';board(2,2)=' ';board(2,3)='1';board(2,4)='2';board(2,5)='2';board(2,6)='1';board(2,7)=' ';
-	board(1,1)='L';board(1,2)=' ';board(1,3)='2';board(1,4)='1';board(1,5)='1';board(1,6)='2';board(1,7)=' ';
+	board(6,1)='1';board(6,2)='2';board(6,3)='1';board(6,4)=' ';board(6,5)='1';board(6,6)='2';board(6,7)='1';
+	board(5,1)='1';board(5,2)='2';board(5,3)='1';board(5,4)=' ';board(5,5)='1';board(5,6)='2';board(5,7)='1';
+	board(4,1)='2';board(4,2)='1';board(4,3)='2';board(4,4)='1';board(4,5)='2';board(4,6)='1';board(4,7)='2';
+	board(3,1)='2';board(3,2)='1';board(3,3)='2';board(3,4)='1';board(3,5)='2';board(3,6)='1';board(3,7)='2';
+	board(2,1)='1';board(2,2)='2';board(2,3)='1';board(2,4)='2';board(2,5)='1';board(2,6)='2';board(2,7)='1';
+	board(1,1)='1';board(1,2)='2';board(1,3)='1';board(1,4)='2';board(1,5)='1';board(1,6)='2';board(1,7)='1';
 */
 }
 
@@ -282,7 +282,7 @@ void Game::makeAISelection(){
 void Game::checkForGameOver(){
 	
 	//check for win or stalemate
-	if(tiles == 42){
+	if(board.detectStalemate()){
 		result = 0;
 		moveToNextGameState();
 	}
