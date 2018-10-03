@@ -219,7 +219,7 @@ void Menu::initControlChoice(){
 	controls.setFillColor(sf::Color::White);
 	
 	//WASD 
-	if(!wasd_texture.loadFromFile("wasd2.jpg", sf::IntRect(0,0,220,151))){
+	if(!wasd_texture.loadFromFile("Images/wasd2.jpg", sf::IntRect(0,0,220,151))){
 		std::cerr << "Error loading from file\n";
 		exit(1);
 	}
@@ -233,7 +233,7 @@ void Menu::initControlChoice(){
 	wasd_box.setOutlineColor(sf::Color::Transparent);
 
 	//ARROWS 
-	if(!arrows_texture.loadFromFile("arrows.jpg", sf::IntRect(0,0,220,151))){
+	if(!arrows_texture.loadFromFile("Images/arrows.jpg", sf::IntRect(0,0,220,151))){
 		std::cerr << "Error loading from file\n";
 		exit(1);
 	}

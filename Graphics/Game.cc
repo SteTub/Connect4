@@ -18,7 +18,7 @@ void Game::init(){
 	window.setVerticalSyncEnabled(true);		
 
 	//BACKGROUND
-	if(!background_texture.loadFromFile("background_1.jpg", sf::IntRect(0,0,1000,1000))){
+	if(!background_texture.loadFromFile("Images/background_1.jpg", sf::IntRect(0,0,1000,1000))){
 		std::cerr << "Error loading from file\n";
 		exit(1);
 	}
